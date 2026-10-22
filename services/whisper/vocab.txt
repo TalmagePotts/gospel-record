@@ -1,0 +1,12 @@
+# Fallback words Whisper should expect, used only when the plugin sends no vocabulary.
+# One per line. Keep it short: Whisper only uses the last ~200 tokens of the prompt.
+Nephi
+Alma
+Helaman
+Moroni
+Mosiah
+Doctrine and Covenants
+Holy Ghost
+sealings
+endowment
+tender mercy

@@ -1,0 +1,7 @@
+node_modules/
+main.js
+test-results/
+playwright-report/
+.env
+models/
+!tests/e2e/vendor/**/main.js

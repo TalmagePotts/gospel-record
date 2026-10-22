@@ -1,0 +1,9 @@
+{
+	"id": "gospel-record",
+	"name": "Gospel Record",
+	"version": "0.1.0",
+	"minAppVersion": "1.8.0",
+	"description": "Fast capture and linking for scripture insights, modern parables and special experiences.",
+	"author": "Talmage Potts",
+	"isDesktopOnly": false
+}

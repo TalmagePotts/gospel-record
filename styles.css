@@ -1,0 +1,175 @@
+.gospel-record-modal .modal-content {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-3);
+}
+
+.gospel-record-modal .gr-types {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: var(--size-4-2);
+}
+
+.gospel-record-modal .gr-types button.is-active,
+.gospel-record-modal .gr-chip.is-active {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+
+.gospel-record-modal .gr-kinds {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--size-4-1);
+}
+
+.gospel-record-modal .gr-text {
+	width: 100%;
+	min-height: 8em;
+	resize: vertical;
+	font-size: var(--font-text-size);
+}
+
+.gospel-record-modal input[type="text"] {
+	width: 100%;
+}
+
+.gospel-record-modal .gr-label {
+	font-size: var(--font-ui-small);
+	color: var(--text-muted);
+	margin-bottom: var(--size-4-1);
+}
+
+.gr-chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--size-4-1);
+	margin-bottom: var(--size-4-1);
+}
+
+.gr-chips:empty {
+	display: none;
+}
+
+.gr-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--size-2-1);
+	padding: var(--size-2-1) var(--size-4-2);
+	border-radius: var(--radius-l);
+	font-size: var(--font-ui-small);
+	background: var(--background-modifier-hover);
+	height: auto;
+}
+
+.gr-chip.gr-suggestion {
+	border: 1px dashed var(--background-modifier-border-hover);
+	background: transparent;
+}
+
+.gr-chip.gr-unknown {
+	color: var(--text-error);
+}
+
+.gr-chip-x svg {
+	width: 12px;
+	height: 12px;
+}
+
+.gospel-record-modal .gr-search {
+	position: relative;
+}
+
+.gospel-record-modal .gr-results {
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-s);
+	margin-top: var(--size-2-1);
+}
+
+.gospel-record-modal .gr-results:empty {
+	display: none;
+}
+
+.gospel-record-modal .gr-result {
+	padding: var(--size-4-1) var(--size-4-2);
+	cursor: pointer;
+}
+
+.gospel-record-modal .gr-result:hover,
+.gospel-record-modal .gr-result:first-child {
+	background: var(--background-modifier-hover);
+}
+
+.gospel-record-modal .gr-create {
+	color: var(--text-accent);
+}
+
+.gr-error {
+	color: var(--text-error);
+	font-size: var(--font-ui-small);
+}
+
+.gr-error:empty {
+	display: none;
+}
+
+.gr-footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: var(--size-4-2);
+}
+
+.gospel-record-view .gr-empty {
+	color: var(--text-muted);
+	font-style: italic;
+}
+
+.gospel-record-view .gr-needs {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--size-4-2);
+	padding: var(--size-4-1) 0;
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.gospel-record-view .gr-needs .gr-chips {
+	margin: 0;
+}
+
+.gospel-record-view .gr-bar {
+	margin-bottom: var(--size-4-2);
+}
+
+@media (max-width: 600px) {
+	.gospel-record-modal .gr-types {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.gr-chip {
+		padding: var(--size-4-1) var(--size-4-3);
+		font-size: var(--font-ui-medium);
+	}
+}
+
+/* Phones: the form fits above the keyboard (max-height set from visualViewport) and scrolls,
+   with Cancel/Save pinned at the top where the keyboard can't cover them. */
+.gospel-record-modal.gr-mobile {
+	display: flex;
+	flex-direction: column;
+}
+
+.gospel-record-modal.gr-mobile .modal-content {
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow-y: auto;
+}
+
+.gospel-record-modal.gr-mobile .gr-footer {
+	position: sticky;
+	top: 0;
+	z-index: 2;
+	justify-content: space-between;
+	padding: var(--size-4-2) 0;
+	background: var(--modal-background, var(--background-primary));
+	border-bottom: 1px solid var(--background-modifier-border);
+}
