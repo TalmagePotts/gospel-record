@@ -47,7 +47,7 @@ export function fixDictation(text: string, fixes: Fix[] = []): string {
 	return out;
 }
 
-export type EntryTypeId = "scripture" | "thought" | "parable" | "experience";
+export type EntryTypeId = "scripture" | "thought" | "parable" | "experience" | "story";
 
 // What a voice note may start with. Kinds only apply to Special Experiences.
 const SPOKEN_TYPES: { phrase: RegExp; type: EntryTypeId; kind?: string }[] = [
@@ -57,6 +57,7 @@ const SPOKEN_TYPES: { phrase: RegExp; type: EntryTypeId; kind?: string }[] = [
 	{ phrase: /thought/i, type: "thought" },
 	{ phrase: /modern parable/i, type: "parable" },
 	{ phrase: /parable/i, type: "parable" },
+	{ phrase: /funny story/i, type: "story" },
 	{ phrase: /miracle/i, type: "experience", kind: "miracle" },
 	{ phrase: /tender mercy/i, type: "experience", kind: "tender mercy" },
 	{ phrase: /answered prayer/i, type: "experience", kind: "answered prayer" },

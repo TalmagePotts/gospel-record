@@ -50,6 +50,8 @@ describe("detectType", () => {
 		["Thought. I noticed", "thought", undefined, "I noticed"],
 		["Modern parable. My son", "parable", undefined, "My son"],
 		["Parable. My son", "parable", undefined, "My son"],
+		["Funny story. In sacrament meeting", "story", undefined, "In sacrament meeting"],
+		["Funny Story! The deacon", "story", undefined, "The deacon"],
 		["Miracle. The car", "experience", "miracle", "The car"],
 		["Tender mercy. A friend", "experience", "tender mercy", "A friend"],
 		["Answered prayer. We", "experience", "answered prayer", "We"],

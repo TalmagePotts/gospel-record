@@ -51,6 +51,24 @@ test.describe("New entry form", () => {
 		);
 	});
 
+	test("saves a Funny Story with Mod+5 into its own folder, without a kind", async ({ vault }) => {
+		const { page } = vault;
+		await vault.command("gospel-record:new-entry");
+		const modal = page.locator(".gospel-record-modal");
+		await expect(modal.locator(".gr-types [data-type]")).toHaveText(
+			["Scripture Insight", "Thoughtful Insight", "Modern Parable", "Special Experience", "Funny Story"]);
+		await page.keyboard.type("The deacon passed the sacrament tray to the bishop twice.");
+		await page.keyboard.press(`${MOD}+5`);
+		await expect(modal.locator('.gr-types [data-type="story"]')).toHaveClass(/is-active/);
+		await expect(modal.locator(".gr-kinds")).toBeHidden();
+		await page.keyboard.press(`${MOD}+Enter`);
+		await expect(modal).toBeHidden();
+		const content = await eventually(() => vault.read("Gospel/Funny Stories/The deacon passed the sacrament tray to the bishop twice.md"));
+		expect(content).toContain("source: form");
+		expect(content).not.toContain("kind:");
+		expect(content).toContain("The deacon passed the sacrament tray to the bishop twice.");
+	});
+
 	test("refuses to save an empty entry and says why", async ({ vault }) => {
 		const { page } = vault;
 		await vault.command("gospel-record:new-entry");

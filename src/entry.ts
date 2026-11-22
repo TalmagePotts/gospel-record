@@ -17,6 +17,7 @@ export const ENTRY_TYPES: EntryType[] = [
 	{ id: "thought", label: "Thoughtful Insight", folder: "Gospel/Thoughtful Insights" },
 	{ id: "parable", label: "Modern Parable", folder: "Gospel/Modern Parables" },
 	{ id: "experience", label: "Special Experience", folder: "Gospel/Special Experiences" },
+	{ id: "story", label: "Funny Story", folder: "Gospel/Funny Stories" },
 ];
 
 export const EXPERIENCE_KINDS = ["miracle", "tender mercy", "answered prayer", "prompting", "temple", "revelation"];

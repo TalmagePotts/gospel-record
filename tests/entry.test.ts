@@ -79,6 +79,7 @@ describe("buildEntry", () => {
 			thought: "Gospel/Thoughtful Insights",
 			parable: "Gospel/Modern Parables",
 			experience: "Gospel/Special Experiences",
+			story: "Gospel/Funny Stories",
 		});
 	});
 });
