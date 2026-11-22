@@ -173,3 +173,8 @@
 	background: var(--modal-background, var(--background-primary));
 	border-bottom: 1px solid var(--background-modifier-border);
 }
+
+.gospel-record-modal .gr-by input {
+	width: 100%;
+	margin-top: var(--size-4-2);
+}

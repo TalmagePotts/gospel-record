@@ -20,6 +20,8 @@ export class EntryModal extends Modal {
 	private scripturesEl!: HTMLInputElement;
 	private typeButtons = new Map<EntryTypeId, HTMLButtonElement>();
 	private kindRow!: HTMLElement;
+	private byRow!: HTMLElement;
+	private byInput!: HTMLInputElement;
 	private chosenEl!: HTMLElement;
 	private suggestedEl!: HTMLElement;
 	private searchEl!: HTMLInputElement;
@@ -61,6 +63,8 @@ export class EntryModal extends Modal {
 			this.typeButtons.set(t.id, b);
 		});
 
+		this.byRow = contentEl.createDiv({ cls: "gr-by" });
+		this.byInput = this.byRow.createEl("input", { type: "text", attr: { placeholder: "Who said it? (optional)", "aria-label": "Who said it" } });
 		this.kindRow = contentEl.createDiv({ cls: "gr-kinds" });
 		for (const kind of EXPERIENCE_KINDS) {
 			const b = this.kindRow.createEl("button", { text: kind, cls: "gr-chip", attr: { "data-kind": kind } });
@@ -167,6 +171,7 @@ export class EntryModal extends Modal {
 		this.plugin.log("type", type);
 		for (const [id, b] of this.typeButtons) b.toggleClass("is-active", id === type);
 		this.kindRow.toggle(type === "experience");
+		this.byRow?.toggle(type === "quote");
 		this.renderKinds();
 	}
 
@@ -313,6 +318,7 @@ export class EntryModal extends Modal {
 			const file = await this.plugin.saveEntry({
 				type: this.type,
 				kind: this.type === "experience" ? this.kind || undefined : undefined,
+				by: this.type === "quote" ? this.byInput.value.trim() || undefined : undefined,
 				title: this.titleInput.value,
 				text: body,
 				topics: this.topics,

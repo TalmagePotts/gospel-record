@@ -18,6 +18,7 @@ export const ENTRY_TYPES: EntryType[] = [
 	{ id: "parable", label: "Modern Parable", folder: "Gospel/Modern Parables" },
 	{ id: "experience", label: "Special Experience", folder: "Gospel/Special Experiences" },
 	{ id: "story", label: "Funny Story", folder: "Gospel/Funny Stories" },
+	{ id: "quote", label: "Quote", folder: "Gospel/Quotes" },
 ];
 
 export const EXPERIENCE_KINDS = ["miracle", "tender mercy", "answered prayer", "prompting", "temple", "revelation"];
@@ -37,6 +38,8 @@ export interface EntryInput {
 	date: string;
 	title?: string;
 	kind?: string;
+	/** Who said it (quotes). */
+	by?: string;
 	source?: Source;
 	/** Vault path of a recording to embed. */
 	audio?: string;
@@ -61,6 +64,17 @@ const quote = (s: string) => JSON.stringify(s);
 const yamlList = (items: string[]) => (items.length ? items.map((i) => `\n  - ${quote(i)}`).join("") : " []");
 const topicLink = (name: string) => (name.startsWith("[[") ? name : `[[${name}]]`);
 
+/** Who said a quote: a last line like "— President Nelson", or "… ” - Alma" after a closing quote mark. */
+export function splitAttribution(text: string): { by?: string } {
+	const lines = text.trim().split("\n");
+	const last = lines[lines.length - 1]?.trim() ?? "";
+	const onOwnLine = /^(?:—|–|-{1,2})\s*(\S.*)$/.exec(last);
+	if (onOwnLine && lines.length > 1 && !/^(?:—|–|-{1,2})\s/.test(lines[lines.length - 2]?.trim() ?? "")) return { by: onOwnLine[1].trim() };
+	const afterQuote = /["”’]\s*(?:—|–|-{1,2})\s*([^"”]+)$/.exec(last);
+	if (afterQuote) return { by: afterQuote[1].trim() };
+	return {};
+}
+
 export function typeById(id: string, types: EntryType[] = ENTRY_TYPES): EntryType | undefined {
 	return types.find((t) => t.id === id);
 }
@@ -70,11 +84,14 @@ export function buildEntry(input: EntryInput, types: EntryType[] = ENTRY_TYPES):
 	if (!type) throw new Error(`unknown entry type: ${input.type}`);
 	const lines = [`date: ${input.date}`];
 	if (input.kind) lines.push(`kind: ${input.kind}`);
+	const by = input.by?.trim();
+	if (by) lines.push(`by: ${quote(by)}`);
 	lines.push(`topics:${yamlList(input.topics.map(topicLink))}`);
 	lines.push(`scriptures:${yamlList(input.scriptures)}`);
 	if (input.source) lines.push(`source: ${input.source}`);
 	if (input.audio) lines.push(`audio: ${quote(`[[${input.audio}]]`)}`);
 	let body = input.text.trim();
+	if (by && !splitAttribution(body).by) body += `\n\n— ${by}`;
 	if (input.audio) body += `\n\n![[${input.audio}]]`;
 	return {
 		folder: type.folder,
@@ -133,6 +150,10 @@ export function processIncoming(note: IncomingNote, ctx: { topics: TopicIndex; f
 	delete fm.kind;
 	const out: Record<string, unknown> = { ...fm, topics, scriptures, suggested_topics: suggested };
 	if (kind) out.kind = kind;
+	if (type === "quote") {
+		const by = (typeof fm.by === "string" && fm.by.trim()) || splitAttribution(text).by;
+		if (by) out.by = by;
+	}
 	if (!chosenType && !spokenType) out.type_guessed = true;
 
 	return { type, title: deriveTitle(text), body: text, frontmatter: out };

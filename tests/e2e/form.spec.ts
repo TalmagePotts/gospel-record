@@ -56,7 +56,7 @@ test.describe("New entry form", () => {
 		await vault.command("gospel-record:new-entry");
 		const modal = page.locator(".gospel-record-modal");
 		await expect(modal.locator(".gr-types [data-type]")).toHaveText(
-			["Scripture Insight", "Thoughtful Insight", "Modern Parable", "Special Experience", "Funny Story"]);
+			["Scripture Insight", "Thoughtful Insight", "Modern Parable", "Special Experience", "Funny Story", "Quote"]);
 		await page.keyboard.type("The deacon passed the sacrament tray to the bishop twice.");
 		await page.keyboard.press(`${MOD}+5`);
 		await expect(modal.locator('.gr-types [data-type="story"]')).toHaveClass(/is-active/);
@@ -67,6 +67,23 @@ test.describe("New entry form", () => {
 		expect(content).toContain("source: form");
 		expect(content).not.toContain("kind:");
 		expect(content).toContain("The deacon passed the sacrament tray to the bishop twice.");
+	});
+
+	test("saves a Quote with Mod+6 and who said it", async ({ vault }) => {
+		const { page } = vault;
+		await vault.command("gospel-record:new-entry");
+		const modal = page.locator(".gospel-record-modal");
+		await expect(modal.locator(".gr-by")).toBeHidden();
+		await page.keyboard.type("Joy has little to do with our circumstances.");
+		await page.keyboard.press(`${MOD}+6`);
+		await expect(modal.locator('.gr-types [data-type="quote"]')).toHaveClass(/is-active/);
+		await expect(modal.locator(".gr-by")).toBeVisible();
+		await modal.locator(".gr-by input").fill("Russell M. Nelson");
+		await page.keyboard.press(`${MOD}+Enter`);
+		await expect(modal).toBeHidden();
+		const content = await eventually(() => vault.read("Gospel/Quotes/Joy has little to do with our circumstances.md"));
+		expect(content).toContain('by: "Russell M. Nelson"');
+		expect(content.trimEnd().endsWith("— Russell M. Nelson")).toBe(true);
 	});
 
 	test("refuses to save an empty entry and says why", async ({ vault }) => {

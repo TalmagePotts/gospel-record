@@ -4,7 +4,7 @@ An Obsidian plugin for recording spiritual insights, modern parables and special
 experiences quickly, and finding them again by topic and scripture.
 
 - **Four kinds of entry**, each in its own folder: Scripture Insights, Thoughtful
-  Insights, Modern Parables, Funny Stories, Special Experiences (with a kind: miracle, tender
+  Insights, Modern Parables, Funny Stories, Quotes (with who said it), Special Experiences (with a kind: miracle, tender
   mercy, answered prayer, prompting, temple, revelation).
 - **A capture form** (`Mod+Shift+E` if you set the hotkey; a feather icon in the ribbon;
   `obsidian://gospel-record?mode=new` from an iPhone Shortcut; also `mode=sacred`, `mode=dashboard`, `mode=file-inbox`). Topics are suggested from

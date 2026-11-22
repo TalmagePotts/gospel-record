@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildEntry, deriveTitle, ENTRY_TYPES, processIncoming, safeFileName, withTopicBlock } from "../src/entry";
+import { buildEntry, deriveTitle, ENTRY_TYPES, processIncoming, safeFileName, splitAttribution, withTopicBlock } from "../src/entry";
 import { TopicIndex } from "../src/topics";
 
 const topics = new TopicIndex([
@@ -80,6 +80,7 @@ describe("buildEntry", () => {
 			parable: "Gospel/Modern Parables",
 			experience: "Gospel/Special Experiences",
 			story: "Gospel/Funny Stories",
+			quote: "Gospel/Quotes",
 		});
 	});
 });
@@ -173,5 +174,32 @@ describe("withTopicBlock", () => {
 	it("leaves a page that already has it alone", () => {
 		const page = "x\n```gospel-record\nshow: topic\n```\n";
 		expect(withTopicBlock(page)).toBe(page);
+	});
+});
+
+describe("quotes", () => {
+	it("finds who said it on the last line or after a closing quote mark", () => {
+		expect(splitAttribution("“The best time to plant a tree was 20 years ago.”\n— Chinese proverb")).toEqual({ by: "Chinese proverb" });
+		expect(splitAttribution("\"Faith is not to have a perfect knowledge\" - Alma")).toEqual({ by: "Alma" });
+		expect(splitAttribution("Line one\n-- President Nelson, Oct 2024 GC")).toEqual({ by: "President Nelson, Oct 2024 GC" });
+		expect(splitAttribution("No attribution here - just a dash in the middle")).toEqual({});
+		expect(splitAttribution("- a list item\n- another")).toEqual({});
+	});
+
+	it("saves who said it as a property and under the quote", () => {
+		const e = buildEntry({ type: "quote", text: "Be still, and know that I am God.", by: "Psalm 46:10", topics: [], scriptures: [], date: "2026-11-22" });
+		expect(e.folder).toBe("Gospel/Quotes");
+		expect(e.content).toContain('by: "Psalm 46:10"');
+		expect(e.content.trimEnd().endsWith("— Psalm 46:10")).toBe(true);
+	});
+
+	it("files a quote from the inbox with who said it", () => {
+		const out = processIncoming(
+			{ frontmatter: { needs_processing: true, type: "quote", source: "inbox-sorter" }, body: "“Joy is the purpose.”\n— Russell M. Nelson" },
+			{ topics: { suggest: () => [] } as any, fixes: [] },
+		);
+		expect(out.type).toBe("quote");
+		expect(out.frontmatter.by).toBe("Russell M. Nelson");
+		expect(out.frontmatter.type_guessed).toBeUndefined();
 	});
 });
